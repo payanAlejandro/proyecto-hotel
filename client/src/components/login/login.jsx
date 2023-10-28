@@ -1,9 +1,27 @@
 import React, { useState } from "react";
-
+const axios = require('axios');
 import styles from "./login.module.css";
 import { getImageUrl } from "../../utils";
 
 export const Login = () => {
+    const [email, setEmail] = useState("");
+    const [contrasena, setContrasena] = useState("");
+
+      const login = () => {
+        axios.post('http://localhost:3001/login', {
+            email: email,
+            contrasena: contrasena
+          })
+            .then((response) => {
+                // Manejar la respuesta del servidor en caso de éxito
+                alert('Inicio de sesión exitoso:', response.data);
+                // Aquí puedes redirigir al usuario o realizar otras acciones necesarias.
+            })
+            .catch((error) => {
+                // Manejar errores en caso de fallo en el inicio de sesión
+                console.error('Error de inicio de sesión:', error);
+            });
+    }
     return(
        <>
        <div className={styles.navbar}>
