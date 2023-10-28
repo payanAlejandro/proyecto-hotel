@@ -7,11 +7,13 @@ const cors = require("cors");
 app.use(cors());
 app.use(express.json());
 
+
 const db = mysql.createConnection({
     host:"localhost",
     user:"root",
-    password:"12345678",
-    database:"hotel"
+    password:"",
+    database:"hotel",
+    port: "3307"
 });
 
 //-----------------------------------------------------------USUARIOS--------------------------------------------------------------//
@@ -58,6 +60,21 @@ app.get("/getUser/:id",(req,res)=>{
     }
     );
 });
+
+app.post('/login', (req, res) => {
+    const { email, contrasena } = req.body;
+  
+    // Verifica las credenciales (en un entorno real, consulta una base de datos)
+    const user = db.query('SELECT * FROM usuarios WHERE email = ? AND contrasena = ?', [email, contrasena]);
+
+    if (user) {
+      // En un entorno de producción real, generaría y enviaría un token JWT en lugar de esto.
+      res.json({ message: 'Inicio de sesión exitoso' });
+    } else {
+      res.status(401).json({ message: 'Credenciales incorrectas' });
+    }
+  });
+  
 
 app.put("/updateUser",(req,res)=>{
     const id_usuario = req.body.id_usuario;
