@@ -1,10 +1,13 @@
 const express = require("express");
 const app = express();
+const session = require('express-session');
 
 const mysql = require("mysql");
 const cors = require("cors");
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const verify = jwt.verify;
+const JWT_SECRET = process.env.JWT_SECRET || "token.01010101";
 
 app.use(cors());
 app.use(express.json());
@@ -65,25 +68,92 @@ app.get("/getUser/:id", (req, res) => {
 });
 
 /*LOGIN*/
-const secretKey = crypto.randomBytes(64).toString('hex');
+// Configura la sesión
 app.post('/login', (req, res) => {
     const { email, contrasena } = req.body;
-    const user = db.query('SELECT * FROM usuarios WHERE email = ? AND contrasena = ?', [email, contrasena]);
-    const usuario = {
-        email: email,
-        contrasena: 'contrasena',
-    };
-
-    if (user) {
-        jwt.sign({ usuario }, secretKey, { expiresIn: '1h' }, (err, token) => {
-            if (err) {
-                res.status(500).json({ error: 'Error al generar el token' });
-            } else {
-                res.json({ token });
-            }
+  
+    db.query('SELECT * FROM usuarios WHERE email = ? AND contrasena = ?', [email, contrasena], (err, results) => {
+      if (err) {
+        res.status(500).json({ error: 'Error en la base de datos' });
+      } else if (results.length === 0) {
+        res.status(401).json({ error: 'Credenciales incorrectas' });
+      } else {
+        const usuario = {
+          email: email,
+        };
+  
+        jwt.sign({ usuario }, JWT_SECRET, { expiresIn: '1h' }, (jwtErr, token) => {
+          if (jwtErr) {
+            res.status(500).json({ error: 'Error al generar el token' });
+          } else {
+            res.json({ token });
+          }
         });
+      }
+    });
+  });
+  
+  app.get('/user', (req, res) => {
+    const jwtByUser = req.headers.authorization || ""; // Obtiene el token del encabezado
+    const jwt2 = jwtByUser.split(" ").pop();
+    
+    if (!jwt2) {
+      return res.status(401).json({ error: 'No has iniciado sesión' });
     }
-});
+  
+    const isUser = verifyToken(jwt2);
+    if (isUser) {
+      const email = isUser.usuario.email;
+  
+      db.query('SELECT * FROM usuarios WHERE email = ?', [email], (err, result) => {
+        if (err) {
+          // Manejo de errores
+        } else if (result.length === 0) {
+          res.status(401).json({ error: 'Credenciales incorrectas' });
+        } else {
+          res.send(result);
+        }
+      });
+    } else {
+      res.status(401).json({ error: 'Token no válido' });
+    }
+  });
+  
+/*
+const checkJwt = (req, res, next) => {
+    try {
+      const jwtByUser = req.headers.authorization || "";
+      const jwt = jwtByUser.split(" ").pop(); // 11111
+      const isUser = verifyToken(`${jwt}`) = { id };
+      if (!isUser) {
+        res.status(401);
+        res.send("NO_TIENES_UN_JWT_VALIDO");
+      } else {
+        req.user = isUser;
+        next();
+      }
+    } catch (e) {
+      console.log({ e });
+      res.status(400);
+      res.send("SESSION_NO_VALIDAD");
+    }
+  };
+
+const JWT_SECRET = process.env.JWT_SECRET || "token.01010101";
+
+const generateToken = (id) => {
+  const jwt = sign({ id }, JWT_SECRET, {
+    expiresIn: "2h",
+  });
+  return jwt;
+};
+
+*/
+const verifyToken = (jwt) => {
+  const isOk = verify(jwt, JWT_SECRET);
+  return isOk;
+}; 
+
 
 
 app.put("/updateUser", (req, res) => {
@@ -186,23 +256,49 @@ app.delete("/deleteRoom/:id", (req, res) => {
 
 //-----------------------------------------------------------RESERVACIONES--------------------------------------------------------------//
 
-app.post("/createReservation", (req, res) => {
+app.post("/createReservation", async (req, res) => {
+    const id = req.body.id;
     const fecha_llegada = req.body.fecha_llegada;
     const fecha_salida = req.body.fecha_salida;
-    const numero_huespedes = req.body.numero_huespedes;
+    const total_pago = req.body.total_pago;
     const id_usuario = req.body.id_usuario;
     const id_habitacion = req.body.id_habitacion;
-
-    db.query('INSERT INTO reservaciones(fecha_llegada,fecha_salida,numero_huespedes,id_usuario,id_habitacion) VALUES(?,?,?,?,?)', [fecha_llegada, fecha_salida, numero_huespedes, id_usuario, id_habitacion],
-        (err, result) => {
+  
+    try {
+      // Primero, crea el pago con Stripe
+      const payment = await stripe.paymentIntents.create({
+        amount: total_pago,
+        currency: "MXN",
+        description: "Luxury Hotel Reservation",
+        payment_method: id,
+        confirm: true, // Confirmar el pago al mismo tiempo
+      });
+  
+      // Después de confirmar el pago, realiza la inserción en la base de datos
+      if (payment.status === "succeeded") {
+        db.query(
+          'INSERT INTO reservaciones(fecha_llegada, fecha_salida, total_pago, id_usuario, id_habitacion) VALUES(?, ?, ?, ?, ?)',
+          [fecha_llegada, fecha_salida, total_pago, id_usuario, id_habitacion],
+          (err, result) => {
             if (err) {
-                console.log(err);
+              console.log(err);
+              return res.status(500).json({ message: "Error al insertar en la base de datos" });
             } else {
-                res.send(result);
+              res.send(result);
+              console.log(payment);
+              return res.status(200).json({ message: "Successful Payment" });
             }
-        }
-    );
-});
+          }
+        );
+      } else {
+        return res.status(400).json({ message: "El pago no se ha completado con éxito." });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: error.raw.message });
+    }
+  });
+  
 
 app.get("/getReservations", (req, res) => {
     db.query('SELECT * FROM reservaciones',

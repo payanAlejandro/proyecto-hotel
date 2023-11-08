@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Axios from "axios";
 import styles from "./sign-up.module.css";
 import { getImageUrl } from "../../utils";
 

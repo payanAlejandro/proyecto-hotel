@@ -29,10 +29,16 @@ const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
 
 //CONSTANTES PARA LOS FETCH
 const [habitaciones, setHabitaciones] = useState("")
+const [usuario, setUsuario] = useState(null);
+const [fecha_llegada, setFecha_llegada] = useState("")
+const [fecha_salida, setFecha_salida] = useState("")
+
+total_pago = selectedRoom.precio * numberOfNights
 
 //SECCION PARA LOS FETCH
 useEffect(() => {
     getHabitaciones();
+    getUsuario();
   }, []);
 
   const getHabitaciones = () => {
@@ -45,13 +51,60 @@ useEffect(() => {
       });
   }
 
-//FUNCIONES PARA EL MODAL
-  const handlePayment = async () => {
-    // Realiza la lógica de pago aquí
-    // Puedes usar la variable `stripe` y otros valores según tus necesidades
+  const getUsuario = () => {
+    const token = localStorage.getItem('token'); // Obtener el token de localStorage
+    Axios.get("http://localhost:3001/user", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then((response) => {
+      setUsuario(response.data);
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
+  
+//FUNCIONES PARA EL MODAL
+const handlePayment = async (e) => {
+  e.preventDefault();
 
-  const openModal = (room) => {
+  const { error, paymentMethod } = await stripe.createPaymentMethod({
+    type: "card",
+    card: Elements.getElement(CardElement),
+  });
+  setLoading(true);
+
+  if (!error) {
+    // console.log(paymentMethod)
+    const { id } = paymentMethod;
+    try {
+      const { data } = await Axios.post(
+        "http://localhost:3001/createReservation",
+        {
+          id,
+          fecha_llegada: fecha_llegada,
+          fecha_salida: fecha_salida,
+          total_pago: total_pago,
+          id_usuario: id_usuario,
+          id_habitacion: id_habitacion
+        }
+      );
+      console.log(data);
+
+      Elements.getElement(CardElement).clear();
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  }
+};
+
+console.log(!stripe || loading);
+
+  const openModal = (room, ) => {
     setIsModalOpen(true);
     setSelectedRoom(room);
   }
@@ -111,6 +164,7 @@ useEffect(() => {
           <div className={styles.modalContent}>
             <span className={styles.closeBtn} onClick={closeModal}>&times;</span>
             <p>Room: {selectedRoom.tipo_de_habitacion}</p>
+            <p>User Name: {usuario && usuario[0] ? usuario[0].nombre : 'Nombre no disponible'}</p>
             <p>Price: ${selectedRoom.precio} per night</p>
             <div>
               <p>Arrival Date:</p>
@@ -121,7 +175,6 @@ useEffect(() => {
               <DatePicker selected={departureDate} onChange={handleDepartureDateChange} />
             </div>
             <p>Number of Nights: {numberOfNights}</p>
-
             <Elements stripe={stripePromise}>
               <div className={styles.paymentSection}>
                 <p>Total Payment: ${selectedRoom.precio * numberOfNights}</p>

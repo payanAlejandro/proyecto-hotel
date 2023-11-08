@@ -7,22 +7,25 @@ export const Login = () => {
     const [email, setEmail] = useState("");
     const [contrasena, setContrasena] = useState("");
 
-      const login = () => {
+    const login = () => {
         Axios.post('http://localhost:3001/login', {
-            email: email,
-            contrasena: contrasena
+          email: email,
+          contrasena: contrasena
+        })
+          .then((response) => {
+            // Manejar la respuesta del servidor en caso de éxito
+            localStorage.setItem('token', response.data.token); // Almacena el token en localStorage
+            alert('Inicio de sesión exitoso:', response.data);
+            window.location.href = "/";
+            // Aquí puedes redirigir al usuario o realizar otras acciones necesarias.
           })
-            .then((response) => {
-                // Manejar la respuesta del servidor en caso de éxito
-                alert('Inicio de sesión exitoso:', response.data);
-                window.location.href = "/";
-                // Aquí puedes redirigir al usuario o realizar otras acciones necesarias.
-            })
-            .catch((error) => {
-                // Manejar errores en caso de fallo en el inicio de sesión
-                console.error('Error de inicio de sesión:', error);
-            });
-    }
+          .catch((error) => {
+            // Manejar errores en caso de fallo en el inicio de sesión
+            console.error('Error de inicio de sesión:', error);
+          });
+      }
+      
+      
     return(
        <>
        <div className={styles.navbar}>
