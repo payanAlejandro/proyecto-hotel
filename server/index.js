@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const stripe = require('stripe')('pk_test_51O2gfuJw0dovYyK3ViteKYgwaQz7Fh3fDPUDkqFrzI7zoIQ5c6EcT43rAjU37s4QvJaQJqGqE2uvllPbPS0SoWDI00NywlwgMx');
+
 const session = require('express-session');
 
 const mysql = require("mysql");
@@ -11,7 +13,9 @@ const JWT_SECRET = process.env.JWT_SECRET || "token.01010101";
 
 app.use(cors());
 app.use(express.json());
-
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 const db = mysql.createConnection({
@@ -261,6 +265,7 @@ app.post("/createReservation", async (req, res) => {
     const fecha_llegada = req.body.fecha_llegada;
     const fecha_salida = req.body.fecha_salida;
     const total_pago = req.body.total_pago;
+    const token = req.body.stripeToken; 
     const id_usuario = req.body.id_usuario;
     const id_habitacion = req.body.id_habitacion;
   
@@ -269,6 +274,7 @@ app.post("/createReservation", async (req, res) => {
       const payment = await stripe.paymentIntents.create({
         amount: total_pago,
         currency: "MXN",
+        source: token,
         description: "Luxury Hotel Reservation",
         payment_method: id,
         confirm: true, // Confirmar el pago al mismo tiempo
@@ -277,8 +283,8 @@ app.post("/createReservation", async (req, res) => {
       // Después de confirmar el pago, realiza la inserción en la base de datos
       if (payment.status === "succeeded") {
         db.query(
-          'INSERT INTO reservaciones(fecha_llegada, fecha_salida, total_pago, id_usuario, id_habitacion) VALUES(?, ?, ?, ?, ?)',
-          [fecha_llegada, fecha_salida, total_pago, id_usuario, id_habitacion],
+          'INSERT INTO reservaciones(fecha_llegada, fecha_salida, total_pago, token, id_usuario, id_habitacion) VALUES(?, ?, ?, ?, ?, ?)',
+          [fecha_llegada, fecha_salida, total_pago, token, id_usuario, id_habitacion],
           (err, result) => {
             if (err) {
               console.log(err);
