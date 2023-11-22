@@ -1,6 +1,8 @@
+const stripe = require('stripe')('sk_test_51O2gfuJw0dovYyK3m2SlMxrxMN7lpDWb4axDqZYjnzP88GyYi1DybIVnc5MBlk79k0cCspo1VTLnXqfblAPVKtcs00btxDeuDC');
 const express = require("express");
 const app = express();
-const stripe = require('stripe')('pk_test_51O2gfuJw0dovYyK3ViteKYgwaQz7Fh3fDPUDkqFrzI7zoIQ5c6EcT43rAjU37s4QvJaQJqGqE2uvllPbPS0SoWDI00NywlwgMx');
+
+//const stripe = new Stripe('sk_test_51O2gfuJw0dovYyK3m2SlMxrxMN7lpDWb4axDqZYjnzP88GyYi1DybIVnc5MBlk79k0cCspo1VTLnXqfblAPVKtcs00btxDeuDC');
 
 const session = require('express-session');
 
@@ -317,6 +319,40 @@ app.get("/getReservations", (req, res) => {
         }
     );
 });
+
+app.post('/create-checkout-session', async (req, res) => {
+
+  const total_pago = req.body.total_pago;
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price_data: {
+            product_data: {
+              name: "Reservation",
+            },
+            currency: "usd",
+            unit_amount: total_pago,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: "http://localhost:3000/success",
+      cancel_url: "http://localhost:5173/rooms",
+    });
+
+    console.log(session);
+    return res.json({ url: session.url });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+
+  });
+
+app.get("/success", (req, res) => res.send("succes"))
+ app.get("/cancel", (req, res) => res.send("cancel"))
 
 app.put("/updateReservation", (req, res) => {
     const id_reservacion = req.body.id_reservacion;

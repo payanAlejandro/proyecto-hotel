@@ -7,7 +7,8 @@ import { getImageUrl } from "../../utils";
 export const Rooms = () => {
     const [selectedDate, setSelectedDate] = useState(null);
     return(
-        <div className="containerMayor">
+        <>
+        <div className={styles.containerMayor}>
             <div className={styles.container}> 
                 <div className={styles.content}>
                     <div className={styles.welcome}>WELCOME TO</div>
@@ -15,20 +16,13 @@ export const Rooms = () => {
                     <div className={styles.description}>Book your stay and enjoy Luxury redefined at the most affordable rates.</div>
                 </div>
             </div>
-            <div>
-                <center>
-                <DatePicker
-            selected={selectedDate}
-            onChange={(date) => setSelectedDate(date)}
-            dateFormat="yyyy-MM-dd" // Puedes personalizar el formato de fecha
-            placeholderText="Seleccione una fecha"
-            />
-            </center>
-            </div>
             <div className={styles.containerBtn}>
-                <a className={styles.scrollBtn}>V</a>
+                <a href="/">
+                    <button type="button" class="btn btn-lg" style={{ background: 'rgba(224, 185, 115, 1)', color:'white', margin: '30px', fontSize: '1.9rem' }}>Book Now</button>
+                </a>
             </div>
         </div>
+        </>
     );
 
 }

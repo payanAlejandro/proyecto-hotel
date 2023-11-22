@@ -16,10 +16,9 @@ export const Home = () => {
                 </div>
             </div>
             <div className={styles.containerBtn}>
-                <a className={styles.bookBtn}>Book Now</a>
-            </div>
-            <div className={styles.containerBtn}>
-                <a className={styles.scrollBtn}>V</a>
+                <a href="/">
+                    <button type="button" class="btn btn-lg" style={{ background: 'rgba(224, 185, 115, 1)', color:'white', margin: '30px', fontSize: '1.9rem' }}>Book Now</button>
+                </a>
             </div>
         </div>
         </>
