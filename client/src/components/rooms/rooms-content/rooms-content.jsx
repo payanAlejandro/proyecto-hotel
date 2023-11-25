@@ -63,6 +63,12 @@ export function Rooms_content() {
   const postPago = () => {
     Axios.post("http://localhost:3001/create-checkout-session",{
       total_pago: total_pago,
+      id_usuario : id_usuario,
+      fecha_llegada : fecha_llegada,
+      fecha_salida : fecha_salida,
+      id_usuario : id_usuario,
+      id_habitacion : id_habitacion,
+    
     })
       .then((response) => {
         setPago(response.data);
@@ -115,6 +121,15 @@ export function Rooms_content() {
   const calculateTotalPayment = () => {
     if (selectedRoom && numberOfNights) {
       const totalPago = selectedRoom.precio * numberOfNights;
+      const idUsuario = usuario && usuario[0] ? usuario[0].id_usuario : 'Nombre no disponible'
+      const llegada = arrivalDate;
+      const salida = departureDate;
+      const habitacion = selectedRoom.id_habitacion;
+
+      setIdHabitacion(habitacion);
+      setFecha_salida(salida);
+      setFecha_llegada(llegada);
+      setIdUsuario(idUsuario);
       setTotalPago(totalPago);
       postPago();
     }

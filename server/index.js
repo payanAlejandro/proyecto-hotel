@@ -284,20 +284,7 @@ app.post("/createReservation", async (req, res) => {
   
       // Después de confirmar el pago, realiza la inserción en la base de datos
       if (payment.status === "succeeded") {
-        db.query(
-          'INSERT INTO reservaciones(fecha_llegada, fecha_salida, total_pago, token, id_usuario, id_habitacion) VALUES(?, ?, ?, ?, ?, ?)',
-          [fecha_llegada, fecha_salida, total_pago, token, id_usuario, id_habitacion],
-          (err, result) => {
-            if (err) {
-              console.log(err);
-              return res.status(500).json({ message: "Error al insertar en la base de datos" });
-            } else {
-              res.send(result);
-              console.log(payment);
-              return res.status(200).json({ message: "Successful Payment" });
-            }
-          }
-        );
+        
       } else {
         return res.status(400).json({ message: "El pago no se ha completado con éxito." });
       }
@@ -321,8 +308,14 @@ app.get("/getReservations", (req, res) => {
 });
 
 app.post('/create-checkout-session', async (req, res) => {
-
+  const id = req.body.id_usuario;
+  const fecha_llegada = req.body.fecha_llegada;
+  const fecha_salida = req.body.fecha_salida;
   const total_pago = req.body.total_pago;
+  const token = 0; 
+  const id_usuario = req.body.id_usuario;
+  const id_habitacion = req.body.id_habitacion;
+
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -330,7 +323,7 @@ app.post('/create-checkout-session', async (req, res) => {
         {
           price_data: {
             product_data: {
-              name: "Reservation",
+              name: "Reservation" + id,
             },
             currency: "usd",
             unit_amount: total_pago,
@@ -342,7 +335,6 @@ app.post('/create-checkout-session', async (req, res) => {
       success_url: "http://localhost:3000/success",
       cancel_url: "http://localhost:5173/rooms",
     });
-
     console.log(session);
     return res.json({ url: session.url });
   } catch (error) {
