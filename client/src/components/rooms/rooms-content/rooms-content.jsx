@@ -63,12 +63,10 @@ export function Rooms_content() {
   const postPago = () => {
     Axios.post("http://localhost:3001/create-checkout-session",{
       total_pago: total_pago,
-      id_usuario : id_usuario,
       fecha_llegada : fecha_llegada,
       fecha_salida : fecha_salida,
       id_usuario : id_usuario,
       id_habitacion : id_habitacion,
-    
     })
       .then((response) => {
         setPago(response.data);
