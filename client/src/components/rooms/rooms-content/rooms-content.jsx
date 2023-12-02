@@ -78,6 +78,8 @@ export function Rooms_content() {
       });
   }
 
+
+
   // FUNCIONES PARA EL MODAL
 
 
