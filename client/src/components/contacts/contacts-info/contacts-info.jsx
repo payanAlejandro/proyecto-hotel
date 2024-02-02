@@ -23,15 +23,17 @@ export const Contacts_info = () => {
 
           </div>
           <div class="col p-6 text-black">
-          <form>
+          <form action="https://formsubmit.co/luxuryhotel@yopmail.com" method="POST">
+                        <input type="hidden" name="_subject" value="Contacto"/>
                         <label for="name" class="form-label" className={styles.description}>Name:</label><br></br>
-                        <input type="text" class="form-control" className={styles.entradas} id="name" placeholder="Enter your name" name="name"></input><br></br>
+                        <input type="text" class="form-control" className={styles.entradas} id="name" placeholder="Enter your name" name="name" required></input><br></br>
 
                         <label for="email" class="form-label" className={styles.description}>Email:</label><br></br>
-                        <input type="email" class="form-control" className={styles.entradas} id="email" placeholder="Enter email" name="email"></input><br></br>
+                        <input type="email" class="form-control" className={styles.entradas} id="email" placeholder="Enter email" name="email" required></input><br></br>
 
                         <label for="message" class="form-label" className={styles.description}>Message:</label><br></br>
-                        <textarea class="form-control" rows="5" className={styles.entradaTexto} id="message" name="message" placeholder="Write your message"></textarea><br></br>
+                        <textarea class="form-control" rows="5" className={styles.entradaTexto} id="message" name="message" placeholder="Write your message" required></textarea><br></br>
+                        <button type="submit">Send message</button>
                     </form>
           </div>
         </div>

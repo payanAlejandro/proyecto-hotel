@@ -7,7 +7,7 @@ export const Facilities = () => {
 
     return(
        <>
-        <div className={styles.containerMayor}>
+            <div className={styles.containerMayor}>
             <div className={styles.container}> 
                 <div className={styles.content}>
                     <div className={styles.welcome}>WELCOME TO</div>
@@ -16,7 +16,7 @@ export const Facilities = () => {
                 </div>
             </div>
             <div className={styles.containerBtn}>
-                <a href="/">
+                <a href="/rooms">
                     <button type="button" class="btn btn-lg" style={{ background: 'rgba(224, 185, 115, 1)', color:'white', margin: '30px', fontSize: '1.9rem' }}>Book Now</button>
                 </a>
             </div>

@@ -78,6 +78,8 @@ export function Rooms_content() {
       });
   }
 
+
+
   // FUNCIONES PARA EL MODAL
 
 
@@ -174,7 +176,7 @@ export function Rooms_content() {
               <DatePicker selected={departureDate} onChange={handleDepartureDateChange} />
             </div>
             <p>Number of Nights: {numberOfNights}</p>
-            <p>Total payment: ${selectedRoom.precio * numberOfNights}</p>
+            <p>Total payment: ${(selectedRoom.precio * numberOfNights)/100}</p>
             <button type="button" className="btn" onClick={calculateTotalPayment}>Basic</button>
             
           </div>
