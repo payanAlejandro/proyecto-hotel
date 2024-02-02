@@ -3,21 +3,21 @@
 .container {
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  margin-top: 117px;
+  margin-top: 116px;
   z-index: 1;
   margin-left: 10%;
   margin-right: 20%;
+  height: 100vh;
 }
 
 .containerBtn {
   position: relative;
   display: flex;
-  align-items: center;
-  margin-top: 10px;
+  margin-top: 20px;
   z-index: 1;
-  margin-left: 50%;
-
+  justify-content: center;
 }
 
 .content {
@@ -52,6 +52,7 @@
   font-weight: 400;
   line-height: normal;
   letter-spacing: 2.5px;
+  text-wrap: pretty;
 }
 
 .bookBtn {
@@ -67,53 +68,48 @@
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
 }
 
-/* Tu CSS existente aquí */
+.scrollBtn {
+  font-family: Montserrat;
+  text-decoration: none;
+  background-color: var(--color-text);
+  color: var(--color-secundary);
+  border-radius: 50%; /* Cambia el valor de border-radius a 50% para hacerlo redondo */
+  font-weight: 600;
+  width: 50px; /* Ajusta el ancho y el alto según tus preferencias */
+  height: 50px; /* Ajusta el ancho y el alto según tus preferencias */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  margin-left: 10%;
+}
 
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .container {
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 50px;
-    display: flex;
-    flex-direction: column;
-    text-align: center; /* Alinea el texto al centro horizontalmente */
+    margin-left: 5%;
+    margin-right: 5%;
   }
-
   .containerBtn {
-    margin-left: 0;
-    margin-right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Centra el contenido horizontalmente */
-    margin-top: 10px;
+    margin-left: 5%;
   }
-
-  .welcome,
-  .titleHotel,
-  .description,
-  .bookBtn {
-    margin: 10px 0; /* Ajusta el margen según tus preferencias */
+  .welcome {
+    font-size: 30px;
   }
-
-  .welcome,
   .titleHotel {
-    font-size: 2rem;
-    margin: auto; /* Centra vertical y horizontalmente */
+    font-size: 60px;
+    letter-spacing: 6.28px;
   }
-
-  .titleHotel {
-    font-size: 2.5rem;
-    letter-spacing: 0; /* Ajusta el espaciado entre letras según tus preferencias */
-  }
-
   .description {
-    font-size: 1rem;
-    line-height: 1.3;
-    letter-spacing: 0; /* Ajusta el espaciado entre letras según tus preferencias */
+    font-size: 20px;
+    letter-spacing: 2px;
   }
-
   .bookBtn {
-    font-size: 1rem;
+    font-size: 20px;
+    padding: 10px 13px;
+  }
+  .scrollBtn {
+    width: 40px;
+    height: 40px;
   }
 }
