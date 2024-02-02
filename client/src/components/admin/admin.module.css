@@ -1,0 +1,56 @@
+/* Estilo global */
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Contenedor principal */
+  .container {
+    padding: 20px;
+  }
+  
+  /* Estilo de las tablas */
+  .table {
+    margin-top: 20px;
+  }
+  
+  /* Estilo del formulario */
+  form {
+    margin-top: 20px;
+  }
+  
+  /* Estilo de los botones */
+  .btn {
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  
+  /* Estilo para dispositivos pequeños (hasta 767px) */
+  @media (max-width: 767px) {
+    .col-sm-4 {
+      width: 100%;
+      margin-left: 0;
+    }
+  
+    form {
+      margin-left: 0;
+    }
+  }
+  
+  /* Estilo para dispositivos medianos (768px - 991px) */
+  @media (min-width: 768px) and (max-width: 991px) {
+    .col-sm-4 {
+      width: 50%;
+    }
+  
+    form {
+      margin-left: 0;
+    }
+  }
+  
+  /* Estilo para dispositivos grandes (992px en adelante) */
+  @media (min-width: 992px) {
+    .col-sm-4 {
+      width: 33.33%;
+    }
+  }
+  

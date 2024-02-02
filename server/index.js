@@ -281,6 +281,27 @@ app.delete("/deleteRoom/:id", (req, res) => {
 });
 
 //-----------------------------------------------------------RESERVACIONES--------------------------------------------------------------//
+app.post("/createReservation", async (req, res) => {
+  const fecha_llegada = req.body.fecha_llegada;
+  const fecha_salida = req.body.fecha_salida;
+  const total_pago = req.body.total_pago;
+  const token = 0;
+  const id_usuario = 5;
+  const id_habitacion = req.body.id_habitacion;
+
+  db.query(
+    "INSERT INTO reservaciones(fecha_llegada, fecha_salida, total_pago, token, id_usuario, id_habitacion) VALUES(?, ?, ?, ?, ?, ?)",
+    [fecha_llegada, fecha_salida, total_pago, token, id_usuario, id_habitacion],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+   
+      } else {
+  
+      }
+    }
+  );
+});
 
 app.get("/getReservations", (req, res) => {
   db.query("SELECT * FROM reservaciones", (err, result) => {
@@ -374,12 +395,10 @@ app.post(
           (err, result) => {
             if (err) {
               console.log(err);
-              response
-                .status(500)
-                .json({
-                  message: "Error al insertar en la base de datos",
-                  error: err,
-                });
+              response.status(500).json({
+                message: "Error al insertar en la base de datos",
+                error: err,
+              });
             } else {
               console.log(result);
               response
@@ -406,16 +425,18 @@ app.put("/updateReservation", (req, res) => {
   const id_reservacion = req.body.id_reservacion;
   const fecha_llegada = req.body.fecha_llegada;
   const fecha_salida = req.body.fecha_salida;
-  const numero_huespedes = req.body.numero_huespedes;
+  const total_pago = req.body.total_pago;
+  const token = 0;
   const id_usuario = req.body.id_usuario;
   const id_habitacion = req.body.id_habitacion;
 
   db.query(
-    "UPDATE reservaciones SET fecha_llegada=?,fecha_salida=?,numero_huespedes=?,id_usuario=?,id_habitacion=? WHERE id_reservacion=?",
+    "UPDATE reservaciones SET fecha_llegada=?,fecha_salida=?, total_pago=?,token=?,id_usuario=?,id_habitacion=? WHERE id_reservacion=?",
     [
       fecha_llegada,
       fecha_salida,
-      numero_huespedes,
+      total_pago,
+      token,
       id_usuario,
       id_habitacion,
       id_reservacion,
@@ -431,7 +452,7 @@ app.put("/updateReservation", (req, res) => {
 });
 
 app.delete("/deleteReservation/:id", (req, res) => {
-  const id_reservacion = req.params.id_reservacion;
+  const id_reservacion = req.params.id;
 
   db.query(
     "DELETE FROM reservaciones WHERE id_reservacion=?",
