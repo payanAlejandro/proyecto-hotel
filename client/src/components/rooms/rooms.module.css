@@ -4,20 +4,20 @@
   position: relative;
   display: flex;
   align-items: center;
-  margin-top: 117px;
+  margin-top: 116px;
   z-index: 1;
   margin-left: 10%;
   margin-right: 20%;
+  flex-direction: column;
 }
 
 .containerBtn {
   position: relative;
   display: flex;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 20px;
   z-index: 1;
-  margin-left: 50%;
-
+  justify-content: center;
 }
 
 .content {
@@ -52,68 +52,87 @@
   font-weight: 400;
   line-height: normal;
   letter-spacing: 2.5px;
+  text-wrap: pretty;
 }
 
-.bookBtn {
+.scrollBtn {
   font-family: Montserrat;
   text-decoration: none;
-  background-color: var(--color-btn);
-  color: var(--color-text);
-  border-radius: 10px;
-  font-size: 30px;
+  background-color: var(--color-text);
+  color: var(--color-secundary);
+  border-radius: 50%; /* Cambia el valor de border-radius a 50% para hacerlo redondo */
   font-weight: 600;
-  padding: 17px 26px;
-  cursor: pointer;
+  width: 50px; /* Ajusta el ancho y el alto según tus preferencias */
+  height: 50px; /* Ajusta el ancho y el alto según tus preferencias */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  margin-left: 10%;
 }
 
-/* Tu CSS existente aquí */
+/* Estilo personalizado para el DatePicker */
+.react-datepicker {
+  font-family: Montserrat, Arial, sans-serif; /* Cambia la fuente de texto */
+  background-color: var(--color-btn); /* Cambia el color de fondo */
+  color: var(--color-text); /* Cambia el color del texto */
+  border-radius: 10px; /* Aplica el radio de borde */
+  font-size: 30px; /* Cambia el tamaño de fuente */
+  font-weight: 600; /* Cambia el peso de fuente */
+  padding: 17px 26px; /* Aplica el relleno */
+  cursor: pointer; /* Cambia el cursor */
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25); /* Aplica la sombra */
+  /* Agrega más reglas de estilo según tus preferencias */
+}
 
-@media (max-width: 768px) {
+/* Estilo para los días seleccionables */
+.react-datepicker__day--selected {
+  background-color: var(
+    --color-btn
+  ); /* Cambia el color de fondo de los días seleccionados */
+  color: var(
+    --color-text
+  ); /* Cambia el color del texto de los días seleccionados */
+}
+
+/* Estilo para el botón de abrir el calendario */
+.react-datepicker__input-container {
+  display: inline-block; /* Asegura que el botón de apertura del calendario se muestre correctamente */
+  position: relative;
+}
+
+/* Estilo para el botón de abrir el calendario */
+.react-datepicker__input-container input {
+  background-color: var(
+    --color-btn
+  ); /* Cambia el color de fondo del botón de apertura */
+  color: var(
+    --color-text
+  ); /* Cambia el color del texto del botón de apertura */
+  border-radius: 10px; /* Aplica el radio de borde al botón de apertura */
+  font-size: 30px; /* Cambia el tamaño de fuente del botón de apertura */
+  font-weight: 600; /* Cambia el peso de fuente del botón de apertura */
+  padding: 17px 26px; /* Aplica el relleno al botón de apertura */
+  cursor: pointer; /* Cambia el cursor del botón de apertura */
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25); /* Aplica la sombra al botón de apertura */
+}
+
+@media screen and (max-width: 768px) {
   .container {
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 50px;
-    display: flex;
-    flex-direction: column;
-    text-align: center; /* Alinea el texto al centro horizontalmente */
+    padding: 50px 0px;
   }
-
-  .containerBtn {
-    margin-left: 0;
-    margin-right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Centra el contenido horizontalmente */
-    margin-top: 10px;
-  }
-
-  .welcome,
-  .titleHotel,
-  .description,
-  .bookBtn {
-    margin: 10px 0; /* Ajusta el margen según tus preferencias */
-  }
-
-  .welcome,
   .titleHotel {
-    font-size: 2rem;
-    margin: auto; /* Centra vertical y horizontalmente */
+    font-size: 60px;
   }
-
-  .titleHotel {
-    font-size: 2.5rem;
-    letter-spacing: 0; /* Ajusta el espaciado entre letras según tus preferencias */
-  }
-
   .description {
-    font-size: 1rem;
-    line-height: 1.3;
-    letter-spacing: 0; /* Ajusta el espaciado entre letras según tus preferencias */
+    font-size: 20px;
   }
-
-  .bookBtn {
-    font-size: 1rem;
+  .welcome {
+    font-size: 40px;
+  }
+  .scrollBtn {
+    width: 40px;
+    height: 40px;
   }
 }

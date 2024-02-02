@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Navbar } from './components/navbar/navbar';
 import { Home } from './components/home/home';
 import { Facilities } from './components/facilities/facilities';
@@ -9,11 +9,19 @@ import { Contacts } from './components/contacts/contacts';
 import { Contacts_info } from './components/contacts/contacts-info/contacts-info';
 import { Login } from './components/login/login';
 import { Sign_up } from './components/sign-up/sign-up';
-import { Admin } from './components/admin/admin';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styles from './App.module.css';
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe("pk_test_51O2gfuJw0dovYyK3ViteKYgwaQz7Fh3fDPUDkqFrzI7zoIQ5c6EcT43rAjU37s4QvJaQJqGqE2uvllPbPS0SoWDI00NywlwgMx");
 
 function App() {
+  const [isStripeLoaded, setStripeLoaded] = useState(false);
+
+  useEffect(() => {
+    stripePromise.then(() => setStripeLoaded(true));
+  }, []);
 
   return (
     <Router>
@@ -43,9 +51,13 @@ function App() {
           path="/rooms"
           element={
             <div className={styles.rooms}>
+              {isStripeLoaded && (
+                <Elements stripe={stripePromise}>
                   <Navbar />
                   <Rooms />
                   <Rooms_content />
+                </Elements>
+              )}
             </div>
           }
         />
@@ -76,19 +88,9 @@ function App() {
             </div>
           }
         />
-
-        <Route
-          path="/admin"
-          element={
-            <div className={styles.contacts}>
-              <Admin />
-            </div>
-          }
-        />
       </Routes>
     </Router>
   );
 }
 
 export default App;
-
