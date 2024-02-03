@@ -165,7 +165,7 @@ export function Rooms_content() {
             <p>Room: {selectedRoom.tipo_de_habitacion}</p>
             <p>User Name: {usuario && usuario[0] ? usuario[0].nombre : 'Nombre no disponible'}</p>
             <p>Price: ${selectedRoom.precio} per night</p>
-            <div>
+            <div className={styles.date}>
               <p>Arrival Date:</p>
               <DatePicker selected={arrivalDate} onChange={handleArrivalDateChange} />
             </div>

@@ -13,6 +13,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styles from './App.module.css';
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { Admin } from './components/admin/admin';
 
 const stripePromise = loadStripe("pk_test_51O2gfuJw0dovYyK3ViteKYgwaQz7Fh3fDPUDkqFrzI7zoIQ5c6EcT43rAjU37s4QvJaQJqGqE2uvllPbPS0SoWDI00NywlwgMx");
 
@@ -88,7 +89,15 @@ function App() {
             </div>
           }
         />
-      </Routes>
+      <Route
+          path="/admin"
+          element={
+            <div className={styles.contacts}>
+              <Admin />
+            </div>
+          }
+        />
+           </Routes>
     </Router>
   );
 }

@@ -36,13 +36,14 @@ export const Contacts_info = () => {
             margin: "20px 0"
           }}
         >
-        <form>
+        <form action="https://formsubmit.co/luxuryhotel@yopmail.com" method="POST">
           <label htmlFor="name" className={styles.description}>Name:</label><br></br>
           <input type="text" className={styles.entradas} id="name" placeholder="Enter your name" name="name"></input><br></br>
           <label htmlFor="email" className={styles.description}>Email:</label><br></br>
           <input type="email" className={styles.entradas} id="email" placeholder="Enter email" name="email"></input><br></br>
           <label htmlFor="message" className={styles.description}>Message:</label><br></br>
           <textarea  rows="5" className={styles.entradaTexto} id="message" name="message" placeholder="Write your message"></textarea><br></br>
+          <button type="submit">Send message</button>
         </form>
         </div>
       </div>

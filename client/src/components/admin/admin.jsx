@@ -34,7 +34,6 @@ export const Admin = () => {
         console.log(response.data);
       })
       .catch((error) => {
-        // Manejar el error aquí
         console.error("Error en la solicitud Axios:", error.message);
       });
   };
@@ -64,7 +63,6 @@ export const Admin = () => {
       });
   };
 
-  //FUNCION EDIT
   const update = () => {
     Axios.put(`http://localhost:3001/updateReservation`, {
       id_reservacion: id_reservation,
@@ -105,7 +103,6 @@ export const Admin = () => {
   };
 
   const editarReservation = (reservation) => {
-    console.log(reservation);
     setId(reservation.id_reservacion);
     setFecha_llegada(parseISO(reservation.fecha_llegada));
     setFecha_salida(parseISO(reservation.fecha_salida));
@@ -125,130 +122,125 @@ export const Admin = () => {
 
   return (
     <>
-      <div className="container" style={{ marginTop: "10px" }}>
-        <div className="row">
-          <div className="col-sm-4">
-            <div className="container">
+   <div className="container" style={{ marginTop: "10px" }}>
+    <div className="row">
+      <div className="col-sm-12">
+        <div className="container">
+          <div
+            className="btn-group"
+            role="group"
+            aria-label="Button group with nested dropdown"
+            style={{ marginBottom: "100px" }}
+          >
+            <button type="button" className="btn btn-primary">
+              Vista
+            </button>
+            <div className="btn-group" role="group">
+              <button
+                id="btnGroupDrop1"
+                type="button"
+                className="btn btn-primary dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              ></button>
               <div
-                className="btn-group"
-                role="group"
-                aria-label="Button group with nested dropdown"
-                style={{ marginBottom: "100px" }}
+                className="dropdown-menu"
+                aria-labelledby="btnGroupDrop1"
               >
-                <button type="button" className="btn btn-primary">
-                  Vista
+                <button
+                  className="dropdown-item"
+                  onClick={() => setSelectedTable(1)}
+                >
+                  Historial de reservaciones
                 </button>
-                <div className="btn-group" role="group">
-                  <button
-                    id="btnGroupDrop1"
-                    type="button"
-                    className="btn btn-primary dropdown-toggle"
-                    data-bs-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  ></button>
-                  <div
-                    className="dropdown-menu"
-                    aria-labelledby="btnGroupDrop1"
-                  >
-                    <button
-                      className="dropdown-item"
-                      onClick={() => setSelectedTable(1)}
-                    >
-                      Historial de reservaciones
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      onClick={() => setSelectedTable(0)}
-                    >
-                      Habitaciones
-                    </button>
-                  </div>
-                </div>
+                <button
+                  className="dropdown-item"
+                  onClick={() => setSelectedTable(0)}
+                >
+                  Habitaciones
+                </button>
               </div>
-
-              {selectedTable === 0 && rooms.length > 0 && (
-                <table className="table table-primary table-hover">
-                  <thead>
-                    <tr>
-                      <th scope="col">ID</th>
-                      <th scope="col">Estado</th>
-                      <th scope="col">Tipo de habitacion</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rooms.map((room) => (
-                      <tr className="table-dark" key={room.id_habitacion}>
-                        <th scope="row">{room.id_habitacion}</th>
-                        <td>{room.estado}</td>
-                        <td>{room.tipo_de_habitacion}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-
-              {selectedTable === 1 && reservations.length > 0 && (
-                <table className="table table-primary table-hover">
-                  <thead>
-                    <tr>
-                      <th scope="col">ID Reservacion</th>
-                      <th scope="col">Fecha de Llegada</th>
-                      <th scope="col">Fecha de Salida</th>
-                      <th scope="col">Total de pago</th>
-                      <th scope="col">Cliente</th>
-                      <th scope="col">Habitacion</th>
-                      <th scope="col">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {reservations.map((reservation, key) => (
-                      <tr
-                        className="table-dark"
-                        key={reservation.id_reservacion}
-                      >
-                        <th scope="row">{reservation.id_reservacion}</th>
-                        <td>{reservation.fecha_llegada}</td>
-                        <td>{reservation.fecha_salida}</td>
-                        <td>${reservation.total_pago}</td>
-                        <td>{reservation.id_usuario}</td>
-                        <td>{reservation.id_habitacion}</td>
-                        <td>
-                          <div
-                            className="btn-group"
-                            role="group"
-                            aria-label="Basic example"
-                          >
-                            <button
-                              type="button"
-                              onClick={() => editarReservation(reservation)}
-                              className="btn btn-warning"
-                            >
-                              Editar
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                deleteReservation(reservation.id_reservacion)
-                              }
-                              className="btn btn-danger"
-                            >
-                              Eliminar
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-
-              {selectedTable !== 0 && selectedTable !== 1 && (
-                <p>No hay datos disponibles</p>
-              )}
             </div>
           </div>
-          <div className="col-sm-4" style={{ marginLeft: "400px" }}>
+
+          <div className="row">
+            <div className="col-lg-8">
+              <div className="table-responsive">
+                {selectedTable === 0 && rooms.length > 0 && (
+                <table className="table table-primary table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Tipo de habitacion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rooms.map((room) => (
+                    <tr className="table-dark" key={room.id_habitacion}>
+                      <th scope="row">{room.id_habitacion}</th>
+                      <td>{room.estado}</td>
+                      <td>{room.tipo_de_habitacion}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+                )}
+
+                {selectedTable === 1 && reservations.length > 0 && (
+                <table className="table table-primary table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">ID Reservación</th>
+                    <th scope="col">Fecha de Llegada</th>
+                    <th scope="col">Fecha de Salida</th>
+                    <th scope="col">Total de Pago</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Habitación</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reservations.map((reservation) => (
+                    <tr className="table-dark" key={reservation.id_reservacion}>
+                      <th scope="row">{reservation.id_reservacion}</th>
+                      <td>{reservation.fecha_llegada}</td>
+                      <td>{reservation.fecha_salida}</td>
+                      <td>${reservation.total_pago}</td>
+                      <td>{reservation.id_usuario}</td>
+                      <td>{reservation.id_habitacion}</td>
+                      <td>
+                        <div className="btn-group" role="group" aria-label="Basic example">
+                          <button
+                            type="button"
+                            onClick={() => editarReservation(reservation)}
+                            className="btn btn-warning"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => deleteReservation(reservation.id_reservacion)}
+                            className="btn btn-danger"
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+                )}
+
+                {selectedTable !== 0 && selectedTable !== 1 && (
+                  <p>No hay datos disponibles</p>
+                )}
+              </div>
+            </div>
+
+            <div className="col-lg-4">
             <form>
               <fieldset>
                 <legend>Ingrese aquí los datos de su reservaciones</legend>
@@ -318,9 +310,12 @@ export const Admin = () => {
                 )}
               </fieldset>
             </form>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
     </>
   );
 };
