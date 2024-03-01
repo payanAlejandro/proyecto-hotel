@@ -42,7 +42,7 @@ function App() {
           element={
             <div className={styles.facilities}>
               <Navbar />
-              <Facilities />
+              <Home />
               <Facilities_info />
             </div>
           }
@@ -55,7 +55,7 @@ function App() {
               {isStripeLoaded && (
                 <Elements stripe={stripePromise}>
                   <Navbar />
-                  <Rooms />
+                  <Home />
                   <Rooms_content />
                 </Elements>
               )}
@@ -68,7 +68,7 @@ function App() {
           element={
             <div className={styles.contacts}>
               <Navbar />
-              <Contacts />
+              <Home />
               <Contacts_info />
             </div>
           }
