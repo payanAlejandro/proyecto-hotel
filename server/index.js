@@ -26,9 +26,36 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "",
+  password: "12345678",
   database: "hotel",
-  port: "3307",
+  port: "3306",
+});
+
+
+// Ruta para mostrar habitaciones disponibles
+app.get('/habitaciones-disponibles', (req, res) => {
+  const fechaLlegada = req.query.fechaLlegada;
+  const fechaSalida = req.query.fechaSalida;
+
+  if (!fechaLlegada || !fechaSalida) {
+    return res.status(400).json({ error: 'Los parámetros de fecha son requeridos.' });
+  }
+
+  const sql = `
+    SELECT *
+    FROM habitaciones
+    WHERE id_habitacion NOT IN (
+      SELECT id_habitacion
+      FROM reservaciones
+      WHERE (
+        (fecha_llegada <= ? AND fecha_salida >= ?)
+      )
+    )`;
+
+  db.query(sql, [fechaSalida, fechaLlegada, fechaSalida, fechaLlegada, fechaSalida, fechaSalida], (err, result) => {
+    if (err) throw err;
+    res.json(result);
+  });
 });
 
 //-----------------------------------------------------------USUARIOS--------------------------------------------------------------//
@@ -511,6 +538,6 @@ app.delete("/deleteReservation/:id", (req, res) => {
   );
 });
 
-app.listen(3001, () => {
+app.listen(3002, () => {
   console.log("Corriendo en el puerto 3001");
 });
