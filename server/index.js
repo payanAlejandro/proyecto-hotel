@@ -245,6 +245,23 @@ app.get("/getRooms", (req, res) => {
   });
 });
 
+app.get("/getRoomById/:id", (req, res) => {
+  const id_habitacion = req.params.id;
+
+  db.query("SELECT * FROM habitaciones WHERE id_habitacion = ?", id_habitacion, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error al obtener la habitación");
+    } else {
+      if (result.length > 0) {
+        res.send(result[0]); // Devuelve la primera habitación encontrada (debería ser única por ID)
+      } else {
+        res.status(404).send("Habitación no encontrada");
+      }
+    }
+  });
+});
+
 app.put("/updateRoom", (req, res) => {
   const id_habitacion = req.body.id_habitacion;
   const tipo_de_habitacion = req.body.tipo_de_habitacion;
@@ -310,6 +327,33 @@ app.get("/getReservations", (req, res) => {
     } else {
       res.send(result);
     }
+  });
+});
+
+// Ruta para mostrar habitaciones disponibles
+app.get('/habitacionesDisponibles', (req, res) => {
+  // Obtener fechas de llegada y salida del usuario (puedes adaptar esto según tu lógica)
+  const fechaLlegada = req.query.fechaLlegada;
+  const fechaSalida = req.query.fechaSalida;
+
+  // Consulta SQL para obtener habitaciones disponibles
+  const sql = `
+    SELECT *
+    FROM habitaciones
+    WHERE id_habitacion NOT IN (
+      SELECT id_habitacion
+      FROM reservaciones
+      WHERE (
+        (fecha_llegada <= ? AND fecha_salida >= ?)
+        OR (fecha_llegada <= ? AND fecha_salida >= ?)
+        OR (fecha_llegada >= ? AND fecha_salida <= ?)
+      )
+    )`;
+
+  // Ejecutar la consulta
+  db.query(sql, [fechaLlegada, fechaLlegada, fechaSalida, fechaSalida, fechaLlegada, fechaSalida], (err, result) => {
+    if (err) throw err;
+    res.json(result);
   });
 });
 
